@@ -24,6 +24,11 @@ const appendBusTimers = (el, buses) => {
 
 const appendError = (el) => {
     el.textContent = 'Error';
+};
+
+const clearOutputFromLastRequest = (nameEl, ulEl) => {
+    nameEl.textContent = '';
+    ulEl.innerHTML = '';
 }
 
 const clearInput = (el) => {
@@ -34,9 +39,11 @@ const getInfo = () => {
     const stopId = getStopId();
     const stopNameDiv = getStopNameDiv();
     const busesUl = getBusesUl();
-    busesUl.innerHTML = '';
 
-    fetch(`https://judgetests.firebaseio.com/businfo/${stopId.value}.json`)
+    const url = `https://judgetests.firebaseio.com/businfo/${stopId.value}.json`;
+    clearOutputFromLastRequest(stopNameDiv, busesUl);
+
+    fetch(url)
         .then(res => {
             if (res.status !== 200) {
                 appendError(stopNameDiv);
