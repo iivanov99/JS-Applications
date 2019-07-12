@@ -1,4 +1,5 @@
 const getUsername = () => document.querySelector('#username').value;
+
 const getReposUl = () => document.querySelector('#repos');
 
 function loadRepos() {
