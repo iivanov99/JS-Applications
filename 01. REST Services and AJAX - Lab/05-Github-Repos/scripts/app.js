@@ -2,7 +2,7 @@ const getUsername = () => document.querySelector('#username').value;
 
 const getReposUl = () => document.querySelector('#repos');
 
-function loadRepos() {
+const loadRepos = () => {
     const username = getUsername();
     const reposUl = getReposUl();
     reposUl.innerHTML = '';
