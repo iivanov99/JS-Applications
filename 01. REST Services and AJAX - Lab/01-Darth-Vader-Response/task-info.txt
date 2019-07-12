@@ -1,0 +1,4 @@
+ - Send a GET request to the link given below.
+ - Copy the response in JSON format.
+
+Request link: https://swapi.co/api/people/4
