@@ -38,10 +38,11 @@ const loadPosts = () => {
         .then(posts => createOptions(postsSelect, posts));
 };
 
-const findCommentByIdAndDisplayIt = (ulElement, comments, id) => {
+const findCommentByIdAndDisplayIt = (ulElement, comments, searchedId) => {
     for (const key in comments) {
-        if (comments[key].postId === id) {
+        if (comments[key].postId === searchedId) {
             const li = document.createElement('li');
+            li.id = comments[key].id;
             li.textContent = comments[key].text;
             ulElement.appendChild(li);
         }
