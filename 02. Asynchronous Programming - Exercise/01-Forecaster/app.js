@@ -118,7 +118,7 @@ const displayWeather = () => {
             appendUpcomingConditions(location);
         })
         .catch(err => {
-            console.log('To Do Error...');
+            console.log('To Do Error...')
         });
 }
 
