@@ -33,8 +33,6 @@ const appendCurrentConditions = (location) => {
     fetch(`https://judgetests.firebaseio.com/forecast/today/${location.code}.json`)
         .then(response => response.json())
         .then(forecastInfo => {
-            domElements.currentConditionsDiv.innerHTML = '<div class="label">Current conditions</div>';
-
             const div = document.createElement('div');
             div.classList.add('forecasts');
 
@@ -73,8 +71,6 @@ const appendUpcomingConditions = (location) => {
     fetch(`https://judgetests.firebaseio.com/forecast/upcoming/${location.code}.json`)
         .then(response => response.json())
         .then(upcomingForecast => {
-            domElements.upcomingForecastDiv.innerHTML = '<div class="label">Three-day forecast</div>';
-            
             const forecastInfoDiv = document.createElement('div');
             forecastInfoDiv.classList.add('forecast-info');
 
@@ -88,11 +84,11 @@ const appendUpcomingConditions = (location) => {
 
 
                 const upcomingDegreesSpan = document.createElement('span');
-                upcomingDegreesSpan.classList.add('forecast=data');
+                upcomingDegreesSpan.classList.add('forecast-data');
                 upcomingDegreesSpan.textContent = `${forecastInfo.low}${weatherSymbols.Degrees}/${forecastInfo.high}${weatherSymbols.Degrees}`;
 
                 const upcomingConditionSpan = document.createElement('span');
-                upcomingConditionSpan.classList.add('forecast=data');
+                upcomingConditionSpan.classList.add('forecast-data');
                 upcomingConditionSpan.textContent = forecastInfo.condition;
 
                 upcomingWeatherSpan.appendChild(upcomingWeatherSymbolSpan);
@@ -104,7 +100,19 @@ const appendUpcomingConditions = (location) => {
 
             domElements.upcomingForecastDiv.appendChild(forecastInfoDiv);
         });
-}
+};
+
+const displayErrorDiv = () => {
+    const errorDiv = document.createElement('div');
+    errorDiv.id = 'error';
+    errorDiv.classList.add('label');
+    errorDiv.textContent = 'Error!';
+    errorDiv.style.textAlign = 'center';
+    errorDiv.style.fontSize = '2em';
+    
+    domElements.forecastDiv.style.display = 'none';
+    domElements.contentDiv.appendChild(errorDiv);
+};
 
 const displayWeather = () => {
     const url = 'https://judgetests.firebaseio.com/locations.json';
@@ -117,10 +125,8 @@ const displayWeather = () => {
             appendCurrentConditions(location);
             appendUpcomingConditions(location);
         })
-        .catch(err => {
-            console.log('To Do Error...')
-        });
-}
+        .catch(err => displayErrorDiv());
+};
 
 (function attachEvents() {
     domElements.getWeatherElement.addEventListener('click', displayWeather);
