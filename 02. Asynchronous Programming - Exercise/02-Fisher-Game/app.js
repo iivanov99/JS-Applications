@@ -1,9 +1,13 @@
 const domElements = {
-    updateBtn: document.querySelector('button.update'),
-    deleteBtn: document.querySelector('button.delete'),
     loadBtn: document.querySelector('button.load'),
     addBtn: document.querySelector('button.add'),
-    catchesDiv: document.querySelector('#catches')
+    catchesDiv: document.querySelector('#catches'),
+    anglerInputEl: document.querySelector('#addForm input.angler'),
+    weightInputEl: document.querySelector('#addForm input.weight'),
+    speciesInputEl: document.querySelector('#addForm input.species'),
+    locationInputEl: document.querySelector('#addForm input.location'),
+    baitInputEl: document.querySelector('#addForm input.bait'),
+    captureTimeInputEl: document.querySelector('#addForm input.captureTime')
 };
 
 const handler = (response) => {
@@ -51,11 +55,36 @@ const loadCatches = (catches) => {
             const url = `https://fisher-game.firebaseio.com/catches/${id}.json`;
 
             fetch(url, { method: 'delete' })
-                .then(displayAllCatches);
+                .then(() => displayAllCatches());
         };
 
-        const updateCatch = () => {
-            console.log('To Do ...');
+        const updateCatch = function () {
+            const currentCatchDiv = this.parentNode;
+
+            const angler = currentCatchDiv.querySelector('input.angler').value;
+            const weight = currentCatchDiv.querySelector('input.weight').value;
+            const species = currentCatchDiv.querySelector('input.species').value;
+            const location = currentCatchDiv.querySelector('input.location').value;
+            const bait = currentCatchDiv.querySelector('input.bait').value;
+            const captureTime = currentCatchDiv.querySelector('input.captureTime').value;
+
+            const url = `https://fisher-game.firebaseio.com/catches/${id}.json`;
+
+            const updatedCatch = {
+                angler,
+                weight,
+                species,
+                location,
+                bait,
+                captureTime
+            };
+
+            fetch(url, {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedCatch)
+            })
+                .then(() => displayAllCatches());
         };
 
         const catchDiv = document.createElement('div');
@@ -106,6 +135,45 @@ const displayAllCatches = () => {
         .then(catches => loadCatches(catches));
 };
 
+const clearAddCatchInput = () => {
+    const { anglerInputEl, weightInputEl, speciesInputEl, locationInputEl, baitInputEl, captureTimeInputEl } = domElements;
+    anglerInputEl.value = '';
+    weightInputEl.value = '';
+    speciesInputEl.value = '';
+    locationInputEl.value = '';
+    baitInputEl.value = '';
+    captureTimeInputEl.value = '';
+};
+
+const createCatch = () => {
+    const { anglerInputEl, weightInputEl, speciesInputEl, locationInputEl, baitInputEl, captureTimeInputEl } = domElements;
+
+    if (anglerInputEl.value && weightInputEl.value && speciesInputEl.value &&
+        locationInputEl.value && baitInputEl.value && captureTimeInputEl.value) {
+        const catchToCreate = {
+            angler: anglerInputEl.value,
+            weight: weightInputEl.value,
+            species: speciesInputEl.value,
+            location: locationInputEl.value,
+            bait: baitInputEl.value,
+            captureTime: captureTimeInputEl.value
+        };
+
+        const url = 'https://fisher-game.firebaseio.com/catches.json';
+
+        fetch(url, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(catchToCreate)
+        })
+            .then(() => {
+                displayAllCatches();
+                clearAddCatchInput();
+            });
+    }
+};
+
 (function attachEvents() {
     domElements.loadBtn.addEventListener('click', displayAllCatches);
+    domElements.addBtn.addEventListener('click', createCatch);
 })();
