@@ -22,6 +22,35 @@ const displayAllBooks = (element, books) => {
     element.appendChild(fragment);
 };
 
+const dispalyAllPaintings = (element, paintings) => {
+    element.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    paintings.forEach(painting => {
+        const li = document.createElement('li');
+        li.textContent = `${painting.title}, ${painting.author}`;
+        li.style.color = 'blue';
+        fragment.appendChild(li);
+    });
+    element.appendChild(fragment);
+};
+
+const displayAllSongs = (element, songs) => {
+    element.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    songs.forEach(song => {
+        const li = document.createElement('li');
+        li.textContent = `${song.name}, ${song.author}`;
+        li.style.color = 'red';
+        fragment.appendChild(li);
+    });
+    element.appendChild(fragment);
+};
+
+const clearInput = () => {
+    domElements.authorInput.value = '';
+    domElements.titleInput.value = '';
+};
+
 const getAllBooks = async function () {
     const url = 'https://baas.kinvey.com/appdata/kid_HJuMl2lGB/books';
     const response = await fetch(url, {
@@ -33,18 +62,6 @@ const getAllBooks = async function () {
     });
     const books = await response.json();
     displayAllBooks(domElements.booksUl, books);
-};
-
-const dispalyAllPaintings = (element, paintings) => {
-    element.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-    paintings.forEach(painting => {
-        const li = document.createElement('li');
-        li.textContent = `${painting.title}, ${painting.author}`;
-        li.style.color = 'blue';
-        fragment.appendChild(li);
-    });
-    element.appendChild(fragment);
 };
 
 const getAllPaintings = async function () {
@@ -60,18 +77,6 @@ const getAllPaintings = async function () {
     dispalyAllPaintings(domElements.paintingsUl, paintings);
 };
 
-const displayAllSongs = (element, songs) => {
-    element.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-    songs.forEach(song => {
-        const li = document.createElement('li');
-        li.textContent = `${song.name}, ${song.author}`;
-        li.style.color = 'red';
-        fragment.appendChild(li);
-    });
-    element.appendChild(fragment);
-};
-
 const getAllSongs = async function () {
     const url = 'https://baas.kinvey.com/appdata/kid_HJuMl2lGB/songs';
     const response = await fetch(url, {
@@ -83,11 +88,6 @@ const getAllSongs = async function () {
     });
     const songs = await response.json();
     displayAllSongs(domElements.songsUl, songs);
-};
-
-const clearInput = () => {
-    domElements.authorInput.value = '';
-    domElements.titleInput.value = '';
 };
 
 const createPainting = async function () {
