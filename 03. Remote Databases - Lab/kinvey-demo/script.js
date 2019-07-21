@@ -66,15 +66,20 @@ const getAllBooks = async function () {
 
 const getAllPaintings = async function () {
     const url = 'https://baas.kinvey.com/appdata/kid_HJuMl2lGB/paintings';
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Authorization': authInfo,
-            'Content-Type': 'application/json'
-        }
-    });
-    const paintings = await response.json();
-    dispalyAllPaintings(domElements.paintingsUl, paintings);
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': authInfo,
+                'Content-Type': 'application/json'
+            }
+        });
+        const paintings = await response.json();
+        dispalyAllPaintings(domElements.paintingsUl, paintings);
+    } catch (err) {
+        domElements.paintingsUl.innerHTML = `<li>An Error Occured</li>`;
+    }
 };
 
 const getAllSongs = async function () {
