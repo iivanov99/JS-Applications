@@ -1,88 +1,70 @@
-const domElements = {
-    booksContainer: document.querySelector('#booksInfo'),
-    loadBooksButton: document.querySelector('#loadBooks'),
-    submitButton: document.querySelector('#submit'),
+const elements = {
     titleInput: document.querySelector('#title'),
     authorInput: document.querySelector('#author'),
     isbnInput: document.querySelector('#isbn'),
-    editSubmitBtn: document.querySelector('#edit'),
-    editCancelBtn: document.querySelector('#cancelEdit')
+    loadBooksButton: document.querySelector('#loadBooks'),
+    submitButton: document.querySelector('#submit'),
+    editButton: document.querySelector('#edit'),
+    cancelEditButton: document.querySelector('#cancelEdit'),
+    tableBody: document.querySelector('#booksInfo')
 };
 
 const authInfo = `Basic ${btoa('guest:guest')}`;
+const baseUrl = 'https://baas.kinvey.com/appdata/kid_S1NCg-ZzB/books';
 
-const createTd = (name) => {
-    const td = document.createElement('td');
-    td.textContent = name;
-    return td;
+const deleteBook = async (bookId) => {
+    await fetch(`${baseUrl}/${bookId}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: authInfo
+        }
+    });
+    loadAllBooks();
 };
 
-const displayAllBooks = (element, books) => {
-    domElements.booksContainer.innerHTML = '';
+const displayEditMenu = (book) => {
+    const { titleInput, authorInput, isbnInput, submitButton, editButton, cancelEditButton } = elements;
+    const { title, author, isbn, _id } = book
+
+    editButton.value = _id;
+
+    titleInput.value = title;
+    authorInput.value = author;
+    isbnInput.value = isbn;
+
+    submitButton.style.display = 'none';
+    editButton.style.display = 'inline-block';
+    cancelEditButton.style.display = 'inline-block';
+};
+
+const displayAllBooks = (books) => {
+    elements.tableBody.innerHTML = '';
 
     books.forEach(book => {
-        const deleteBook = async function () {
-            const url = `https://baas.kinvey.com/appdata/kid_S1NCg-ZzB/books/${book._id}`;
-            await fetch(url, {
-                method: 'DELETE',
-                headers: { 'Authorization': authInfo }
-            });
-            loadAllBooks();
-        };
-
-        const displayEditButtons = function () {
-            const { submitButton, editSubmitBtn, editCancelBtn, titleInput, authorInput, isbnInput } = domElements;
-
-            titleInput.value = book.title;
-            authorInput.value = book.author;
-            isbnInput.value = book.isbn;
-
-            editSubmitBtn.id = book._id;
-            submitButton.style.display = 'none';
-            editSubmitBtn.style.display = 'inline-block';
-            editCancelBtn.style.display = 'inline-block';
-        };
-
         const tr = document.createElement('tr');
+        tr.innerHTML += `<td>${book.title}</td>`;
+        tr.innerHTML += `<td>${book.author}</td>`;
+        tr.innerHTML += `<td>${book.isbn}</td>`;
+        tr.innerHTML += `<td><button>Edit</button><button>Delete</button></td>`;
 
-        const titleTd = createTd(book.title);
-        const authorTd = createTd(book.author);
-        const isbnTd = createTd(book.isbn);
-        const actionTd = document.createElement('td');
+        tr.querySelectorAll('button')[0].addEventListener('click', () => displayEditMenu(book));
+        tr.querySelectorAll('button')[1].addEventListener('click', () => deleteBook(book._id));
 
-        const editBtn = document.createElement('button');
-        editBtn.textContent = 'Edit';
-        editBtn.addEventListener('click', displayEditButtons);
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.addEventListener('click', deleteBook);
-
-        actionTd.appendChild(editBtn);
-        actionTd.appendChild(deleteBtn);
-
-        tr.appendChild(titleTd);
-        tr.appendChild(authorTd);
-        tr.appendChild(isbnTd);
-        tr.appendChild(actionTd);
-
-        element.appendChild(tr);
+        elements.tableBody.appendChild(tr);
     });
 };
 
-const loadAllBooks = async function () {
-    domElements.booksContainer.innerHTML = 'Loading...';
-    const url = 'https://baas.kinvey.com/appdata/kid_S1NCg-ZzB/books';
-
-    const response = await fetch(url, {
+const loadAllBooks = async () => {
+    elements.tableBody.innerHTML = 'Loading...';
+    const response = await fetch(baseUrl, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': authInfo
+            'Authorization': authInfo,
+            'Content-Type': 'application/json'
         }
     });
     const books = await response.json();
-    displayAllBooks(domElements.booksContainer, books);
+    displayAllBooks(books);
 };
 
 const isFormValid = (title, author, isbn) => {
@@ -92,83 +74,78 @@ const isFormValid = (title, author, isbn) => {
     return false;
 };
 
-const clearInput = () => {
-    const { titleInput, authorInput, isbnInput } = domElements;
-    titleInput.value = '';
-    authorInput.value = '';
-    isbnInput.value = '';
+const clearInputFields = (...args) => {
+    args.forEach(arg => {
+        arg.value = '';
+    });
 };
 
-const createBook = async function (event) {
-    event.preventDefault();
-    const { titleInput, authorInput, isbnInput } = domElements;
+const createBook = async (ev) => {
+    ev.preventDefault();
+    const { titleInput, authorInput, isbnInput } = elements;
 
     if (isFormValid(titleInput.value, authorInput.value, isbnInput.value)) {
-        const url = 'https://baas.kinvey.com/appdata/kid_S1NCg-ZzB/books';
         const newBook = {
             title: titleInput.value,
             author: authorInput.value,
             isbn: isbnInput.value
         };
 
-        await fetch(url, {
+        await fetch(baseUrl, {
             method: 'POST',
             headers: {
-                'Content-type': 'application/json',
-                'Authorization': authInfo
+                'Authorization': authInfo,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(newBook)
-        });
-
+        })
         loadAllBooks();
+        clearInputFields(titleInput, authorInput, isbnInput);
     }
-
-    clearInput();
 };
 
 const hideEditMenu = () => {
-    const { submitButton, editSubmitBtn, editCancelBtn } = domElements;
+    const { titleInput, authorInput, isbnInput, submitButton, editButton, cancelEditButton } = elements;
 
-    clearInput();
+    clearInputFields(titleInput, authorInput, isbnInput);
 
     submitButton.style.display = 'block';
-    editSubmitBtn.style.display = 'none';
-    editCancelBtn.style.display = 'none';
+    editButton.style.display = 'none';
+    cancelEditButton.style.display = 'none';
 };
 
 const editBook = async function (ev) {
     ev.preventDefault();
-    const { submitButton, editSubmitBtn, editCancelBtn, titleInput, authorInput, isbnInput } = domElements;
+    const { titleInput, authorInput, isbnInput } = elements;
 
-    const updatedBook = {
+    const editedBook = {
         title: titleInput.value,
         author: authorInput.value,
         isbn: isbnInput.value
     };
 
-    const url = `https://baas.kinvey.com/appdata/kid_S1NCg-ZzB/books/${this.id}`;
-    
-    await fetch(url, {
+    await fetch(`${baseUrl}/${this.value}`, {
         method: 'PUT',
         headers: {
-            'Content-Type':'application/json',
-            'Authorization': authInfo
+            'Authorization': authInfo,
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify(updatedBook)
+        body: JSON.stringify(editedBook)
     });
 
-    loadAllBooks();
     hideEditMenu();
+    loadAllBooks();
 };
 
-const cancelEdit = (ev) => {
+const cancelEditMenu = (ev) => {
     ev.preventDefault();
     hideEditMenu();
 };
 
 (function attachEvents() {
-    domElements.loadBooksButton.addEventListener('click', loadAllBooks);
-    domElements.submitButton.addEventListener('click', createBook);
-    domElements.editCancelBtn.addEventListener('click', cancelEdit);
-    domElements.editSubmitBtn.addEventListener('click', editBook);
+    const { loadBooksButton, submitButton, editButton, cancelEditButton } = elements;
+    loadBooksButton.addEventListener('click', loadAllBooks);
+    submitButton.addEventListener('click', createBook);
+    editButton.addEventListener('click', editBook);
+    cancelEditButton.addEventListener('click', cancelEditMenu);
 })();
