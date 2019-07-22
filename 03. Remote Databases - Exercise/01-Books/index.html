@@ -18,7 +18,7 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="booksInfo">
             <tr>
                 <td>Harry Poter</td>
                 <td>J. K. Rowling</td>
@@ -48,7 +48,11 @@
         <input type="title" id="author" placeholder="Author...">
         <label>ISBN</label>
         <input type="title" id="isbn" placeholder="Isnb...">
-        <button>Submit</button>
+        <button id="submit">Submit</button>
+        <div id="editButtons">
+            <button id="edit" class ="editButtons">Edit</button>
+            <button id="cancelEdit" class ="editButtons">Cancel</button>
+        </div>
     </form>
     <script src="./app.js"></script>
 </body>
