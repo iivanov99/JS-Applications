@@ -1,0 +1,15 @@
+body {
+    background-color: #2A4B7C;
+}
+
+.content-info {
+    color: #FFD662;
+}
+
+.footer-info, .header-info {
+    color: #2ECC40;
+}
+
+a {
+    color: red;
+}
