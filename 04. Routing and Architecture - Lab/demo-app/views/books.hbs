@@ -1,0 +1,11 @@
+<h1 class="content-info">All books:</h1>
+
+{{#each books}}
+<div class="books-info">
+    <h2><a href="#/books/{{id}}">ID:{{id}}</a></h2>
+    <h2>Title: {{title}}</h2>
+    <h2>Author: {{author}}</h2>
+    <h2>Release Date: {{date}}</h2>
+    <br>
+</div>
+{{/each}}

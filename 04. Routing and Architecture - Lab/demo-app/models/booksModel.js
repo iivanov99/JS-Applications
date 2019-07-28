@@ -1,5 +1,5 @@
-const books = function () {
-    const all = [
+const booksModel = function () {
+    const books = [
         {
             id: 1,
             title: 'Encyclopedia of Modern Bodybuilding',
@@ -14,16 +14,16 @@ const books = function () {
         }
     ];
 
-    const getAll = () => {
-        return all;
+    const getAllBooks = () => {
+        return books;
     };
 
     const addBook = (book) => {
-        all.push(book);
+        books.push(book);
     };
 
     return {
-        getAll,
+        getAllBooks,
         addBook
     }
 }();

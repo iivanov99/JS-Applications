@@ -17,9 +17,9 @@
 
     <nav>
         <ul>
-            <li><a href="/">Home</a></li>
+            <li><a href="#/home">Home</a></li>
             <li><a href="#/about">About</a></li>
-            <li><a href="#/login">Login</a></li>
+            <li><a href="#/register">Register</a></li>
             <li><a href="#/books">All Books</a></li>
             <li><a href="#/contact">Contact</a></li>
         </ul>
@@ -31,9 +31,19 @@
         <h1 class="footer-info">Via SammyJS</h1>
     </footer>
 
+    <script src="./node_modules/handlebars/dist/handlebars.min.js"></script>
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/sammy/lib/sammy.js"></script>
-    <script src="./books.js"></script>
+    <script src="./node_modules/sammy/lib/plugins/sammy.handlebars.js"></script>
+
+    <!-- Controllers -->
+    <script src="./controllers/viewController.js"></script>
+    
+    <!-- Models -->
+    <script src="./models/booksModel.js"></script>
+    <script src="models/contactModel.js"></script>
+    
+    <!-- App -->
     <script src="./app.js"></script>
 </body>
 
