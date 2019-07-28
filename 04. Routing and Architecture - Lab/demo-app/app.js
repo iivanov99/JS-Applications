@@ -31,12 +31,12 @@ const app = Sammy('#content', function () {
             .getAll()
             .forEach(book => {
                 const div = document.createElement('div');
-                div.classList.add('content-info');
+                div.classList.add('books-info');
                 div.innerHTML += `<h2><a href="/#/books/${book.id}">ID:${book.id}</a></h2>
-            <h2>Title: ${book.title}</h2>
-            <h2>Author: ${book.author}</h2>
-            <h2>Release Date: ${book.author}</h2>
-            <br>`;
+                <h2>Title: ${book.title}</h2>
+                <h2>Author: ${book.author}</h2>
+                <h2>Release Date: ${book.author}</h2>
+                <br>`;
                 fragment.appendChild(div);
             });
 
@@ -59,11 +59,36 @@ const app = Sammy('#content', function () {
         }
     };
 
+    const loadLoginForm = () => {
+        this.swap(`
+            <form method="POST" action="#/login">
+                <label for="username">Username:</label><br>
+                <input type="text" name="username" placeholder="Username..."><br>
+                <label for="password">Password:</label><br>
+                <input type="password" name="password" placeholder="Password..."><br>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+        `);
+    };
+
+    const userLogin = (context) => {
+        const { username, password } = context.params;
+
+        if (username && password) {
+            this.swap(`<h1 class="content-info">User ${context.params.username} has successfully logged in!</h1>`);
+        } else {
+            this.swap(`<h1 class="invalid-user-info">Please enter username and password!</h1>`);
+        }
+    };
+
     this.get('/', showHomepage);
     this.get('#/about', showAbout);
     this.get('#/contact', showContact);
     this.get('#/books', loadAllBooks);
     this.get('#/books/:id', loadBook);
+    this.get('#/login', loadLoginForm);
+    this.post('#/login', userLogin);
 });
 
 $(() => app.run());

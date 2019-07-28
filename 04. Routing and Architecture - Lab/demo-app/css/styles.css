@@ -1,8 +1,13 @@
+* {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 30px;
+}
+
 body {
     background-color: #2A4B7C;
 }
 
-.content-info {
+.content-info, label {
     color: #FFD662;
 }
 
@@ -10,6 +15,20 @@ body {
     color: #2ECC40;
 }
 
-a {
+a, .invalid-user-info {
     color: red;
+}
+
+.books-info {
+    color: #FFD662;
+    display: inline-block;
+    margin-right: 3%;
+}
+
+.footer-info {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 25px;
+    width: 100%;
 }
