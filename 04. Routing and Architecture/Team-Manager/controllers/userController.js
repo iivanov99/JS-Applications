@@ -1,4 +1,5 @@
 const userController = function () {
+
     const getRegister = function (context) {
         context.loadPartials({
             header: '../views/common/header.hbs',
@@ -11,11 +12,11 @@ const userController = function () {
     const postRegister = function (context) {
         if (helper.passwordCheck(context.params)) {
             userModel.register(context.params)
-            .then(helper.handler)
-            .then(data => {
-                storage.saveUser(data);
-                context.redirect('#/home');
-            });
+                .then(helper.handler)
+                .then(data => {
+                    storage.saveUser(data);
+                    context.redirect('#/home');
+                });
         } else {
             throw new Error('The password doesn\'t macth!');
         }
@@ -46,7 +47,7 @@ const userController = function () {
                 storage.deleteUser();
                 context.redirect('#/home');
             });
-    }
+    };
 
     return {
         getRegister,

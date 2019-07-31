@@ -1,4 +1,5 @@
 const userModel = function () {
+    
     const register = (params) => {
         const user = {
             username: params.username,

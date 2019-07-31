@@ -1,4 +1,5 @@
 const aboutController = function () {
+    
     const getAbout = function (context) {
         if (storage.getData('userInfo')) {
             const username = JSON.parse(storage.getData('userInfo')).username;

@@ -1,4 +1,5 @@
 const helper = function() {
+    
     const handler = (response) => {
         if (response.status >= 400) {
             throw new Error(`Something went wrong: ${response.statusText}`);
