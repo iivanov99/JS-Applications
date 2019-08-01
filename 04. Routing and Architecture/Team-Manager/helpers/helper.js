@@ -24,9 +24,26 @@ const helper = function () {
         }
     };
 
+    const notifty = (type, message) => {
+        if (type === 'success' || type === 'error' || type ==='loading') {
+            const notification = document.getElementById(`${type}Box`);
+            notification.textContent = message;
+            notification.style.display = 'block';
+        }
+    };
+
+    const stopNofity = () => {
+        Array.from(document.getElementById('notifications').children)
+            .forEach(notification => {
+                notification.style.display = 'none';
+            });
+    };
+
     return {
         handler,
         passwordCheck,
-        setHeaderProperties
+        setHeaderProperties,
+        notify,
+        stopNofity
     }
 }();
