@@ -13,18 +13,16 @@ const helper = function () {
     };
 
     const passwordCheck = function (params) {
-        return params.password === params.repeatPassword;
+        return params.password === params.rePassword;
     };
 
-    const setHeaderProperties = (context) => {
-        if (storage.getData('userInfo')) {
+    const setLoggedInHeaderInfo = (context) => {
             const username = JSON.parse(storage.getData('userInfo')).username;
             context.loggedIn = true;
             context.username = username;
-        }
     };
 
-    const notifty = (type, message) => {
+    const notify = (type, message) => {
         if (type === 'success' || type === 'error' || type ==='loading') {
             const notification = document.getElementById(`${type}Box`);
             notification.textContent = message;
@@ -42,7 +40,7 @@ const helper = function () {
     return {
         handler,
         passwordCheck,
-        setHeaderProperties,
+        setLoggedInHeaderInfo,
         notify,
         stopNofity
     }

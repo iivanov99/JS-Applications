@@ -1,7 +1,9 @@
 const homeController = function () {
     
     const getHome = function (context) {
-        helper.setHeaderProperties(context);
+        if (storage.getData('userInfo')) {
+            helper.setLoggedInHeaderInfo(context);
+        }
 
         context.loadPartials({
             header: '../views/common/header.hbs',
