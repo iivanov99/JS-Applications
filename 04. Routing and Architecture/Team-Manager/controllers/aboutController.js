@@ -1,11 +1,7 @@
 const aboutController = function () {
     
     const getAbout = function (context) {
-        if (storage.getData('userInfo')) {
-            const username = JSON.parse(storage.getData('userInfo')).username;
-            context.loggedIn = true;
-            context.username = username;
-        }
+        helper.setHeaderProperties(context);
 
         context.loadPartials({
             header: '../views/common/header.hbs',
