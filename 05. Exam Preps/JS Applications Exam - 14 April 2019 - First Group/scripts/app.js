@@ -15,6 +15,17 @@ const app = Sammy('#root', function(){
     
     // Events
     this.get('#/createEvent', eventController.getCreateEventPage);
+    this.post('#/createEvent', eventController.postCreateEvent);
+
+    this.get('#/eventDetails/:eventId', eventController.getEventDetailsPage);
+
+    this.get('#/editEvent/:eventId', eventController.getEditEventPage);
+    this.post('#/editEvent/:eventId', eventController.postEditEvent);
+
+    this.get('#/deleteEvent/:eventId', eventController.deleteEvent);
+
+    // Profile
+    this.get('#/profile', profileController.getProfilePage);
 });
 
 (() => {

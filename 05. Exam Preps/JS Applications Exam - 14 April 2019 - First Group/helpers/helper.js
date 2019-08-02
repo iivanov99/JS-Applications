@@ -27,6 +27,7 @@ const helper = function () {
             const notification = document.getElementById(`${type}Box`);
             notification.textContent = message;
             notification.style.display = 'block';
+            notification.addEventListener('click', () => notification.style.display = 'none');
         }
     };
 

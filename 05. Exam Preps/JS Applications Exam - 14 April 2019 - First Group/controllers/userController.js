@@ -10,12 +10,25 @@ const userController = function () {
     };
 
     const postRegister = function (context) {
-        userModel.register(context.params)
-            .then(helper.handler)
-            .then(data => {
-                storage.saveUser(data);
-                context.redirect('#/home');
-            });
+        helper.notify('loading', 'Loading...');
+
+        if (helper.passwordCheck(context.params)) {
+            userModel.register(context.params)
+                .then(helper.handler)
+                .then(data => {
+                    helper.stopNofity();
+                    helper.notify('success', 'You have been registered successfuly!');
+                    storage.saveUser(data);
+                    context.redirect('#/home');
+                })
+                .catch(er => {
+                    helper.stopNofity();
+                    helper.notify('error', 'This username is already taken!');
+                })
+        } else {
+            helper.stopNofity();
+            helper.notify('error', 'Password and Re-Password should match!');
+        }
     };
 
     const getLogin = function (context) {
@@ -28,11 +41,19 @@ const userController = function () {
     };
 
     const postLogin = function (context) {
+        helper.notify('loading', 'Loading...');
+        
         userModel.login(context.params)
             .then(helper.handler)
             .then(data => {
+                helper.stopNofity();
+                helper.notify('success', 'You have been logged in successfuly!');
                 storage.saveUser(data);
                 context.redirect('#/home');
+            })
+            .catch(er => {
+                helper.stopNofity();
+                helper.notify('error', 'Invalid username or password!');
             });
     };
 
