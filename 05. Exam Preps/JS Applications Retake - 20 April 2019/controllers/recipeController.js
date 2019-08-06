@@ -54,8 +54,16 @@ const recipeController = function () {
             });
     };
 
-    const postEditRecipe = function(context) {
-        
+    const postEditRecipe = function (context) {
+        recipeModel.editRecipe(context.params)
+            .then(helper.handler)
+            .then(() => context.redirect('#/home'));
+    };
+
+    const deleteRecipe = function (context) {
+        recipeModel.delRecipe(context.params.recipeId)
+            .then(helper.handler)
+            .then(() => context.redirect('#/home'));
     };
 
     return {
@@ -63,6 +71,7 @@ const recipeController = function () {
         postShareRecipe,
         getRecipeDetailsPage,
         getEditRecipePage,
-        postEditRecipe
+        postEditRecipe,
+        deleteRecipe
     }
 }();
